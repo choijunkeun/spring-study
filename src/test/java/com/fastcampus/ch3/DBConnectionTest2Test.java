@@ -71,9 +71,9 @@ public class DBConnectionTest2Test {
 
         User user2 = new User("asdf", "0922", "잔근", "bbb@bb.com",  new Date(), "sns", new Date());
         updateUser(user2);
-        rowCnt = updateUser(user2);
+        rowCnt += updateUser(user2);
 
-        assertTrue(rowCnt == 1);
+        assertTrue(rowCnt == 2);
 
     }
 
