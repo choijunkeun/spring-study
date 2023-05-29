@@ -1,6 +1,5 @@
 package com.fastcampus.ch3;
 
-import jdk.jshell.spi.ExecutionControlProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +156,42 @@ public class DBConnectionTest2Test {
         int rowCnt = pstmt.executeUpdate();    // insert,update, delete에만 사용 가능
 
         return rowCnt;
+    }
+
+    @Test
+    public void transactionTest() throws Exception {
+        Connection conn = null;
+        try {
+            conn = ds.getConnection();
+
+            deleteAll();
+            conn.setAutoCommit(false);  // 오토커밋 T/F
+
+            String sql = "insert into user_info values (?, ?, ?, ?, ?, ?, now())";
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, "asdf");
+            pstmt.setString(2, "1234");
+            pstmt.setString(3, "abc");
+            pstmt.setString(4, "aaa@aaa.com");
+            pstmt.setDate(5, new java.sql.Date(new Date().getTime()));
+            pstmt.setString(6, "fb");
+
+            int rowCnt = pstmt.executeUpdate();    // insert,update, delete에만 사용 가능
+
+            pstmt.setString(1, "asdf");
+
+            rowCnt = pstmt.executeUpdate();
+
+            conn.commit();
+
+
+        } catch (Exception e) {
+            conn.rollback();
+            e.printStackTrace();
+        } finally {
+        }
+
     }
 
     @Test
